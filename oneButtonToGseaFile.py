@@ -20,7 +20,7 @@ def prepareFile(file,annotationFile,outputPrefix):
     gmt = open("{}.gct".format(outputPrefix),"a")
     cls = open("{}.cls".format(outputPrefix),"a")
     chip = open("{}.chip".format(outputPrefix),"a")
-    genenum = 0
+    #genenum = 0
     geneDict ={}
     ensgidToGenesymbol = {}
     classNum = 0
@@ -46,7 +46,7 @@ def prepareFile(file,annotationFile,outputPrefix):
                 dataall.append(float(key))
             if set(dataall)=={0}:
                 continue
-            genenum += 1
+            #genenum += 1
             geneDict[ensgid]= ensgid+"\t"+'\t'.join(info[1:])
             ensgidToGenesymbol[ensgid] = genesymbol
 
@@ -55,14 +55,14 @@ def prepareFile(file,annotationFile,outputPrefix):
     for key in ensgidToGenesymbol:
         chip.write(key+"\t"+ensgidToGenesymbol[key]+'\t'+"NA"+'\n')
     chip.close()
-    cls.write("{} 2 1".format(len(classList))+'\n')
     lableUnique = list(set(classList))                      ##保持cls文件的顺序
     lableUnique.sort(key=classList.index)
+    cls.write("{} {} 1".format(len(classList),len(lableUnique))+'\n')
     cls.write("# {}".format(" ".join(lableUnique)) + '\n')
     cls.write(" ".join(classList) + '\n')
     cls.close()
     gmt.write("#1.2"+'\n')
-    gmt.write(str(genenum)+'\t'+str(len(classList))+ '\n')
+    gmt.write(str(len(geneDict))+'\t'+str(len(classList))+ '\n')
     gmt.write("NAME"+"\t"+"Description"+'\t'+"\t".join(classList2)+ '\n')
     for key in geneDict:
         gmt.write(key+'\t'+geneDict[key]+'\n')
